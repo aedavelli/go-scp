@@ -40,10 +40,10 @@ Every message and every finished file data transfer from the provider __must be 
 
 ## List of protocol messages
 
- * __C__mmmm <length> <filename> : a single file copy, ___mmmm___ is mode. Example: `C0644 299 group`
- *  __D__mmmm <length> <dirname> : start of recursive directory copy. Length is ignored but must be present. Example: `D0755 0 docs `
+ * **C**mmmm \<length\> \<filename\> : a single file copy, ___mmmm___ is mode. Example: `C0644 299 group`
+ * **D**mmmm \<length\> \<dirname\> : start of recursive directory copy. Length is ignored but must be present. Example: `D0755 0 docs `
  * __E__ : end of directory (D-E pairs can be nested; that's why we can copy recursively) 
- * __T__<mtime> 0 <atime> 0 : modification and access times when -p options is used (I guess you know why it doesn't make sense to transfer ctime). Times are in seconds, since 00:00:00 UTC, Jan. 1, 1970. Two zeroes are present there in case there is any need to use microseconds in the future. This message was not present in original rcp implementation. Example: `T1183828267 0 1183828267 0` 
+ * __T__\<mtime\> 0 \<atime\> 0 : modification and access times when -p options is used (I guess you know why it doesn't make sense to transfer ctime). Times are in seconds, since 00:00:00 UTC, Jan. 1, 1970. Two zeroes are present there in case there is any need to use microseconds in the future. This message was not present in original rcp implementation. Example: `T1183828267 0 1183828267 0` 
 
 
 After the messages the raw data is transfered. The consumer reads exactly that much data as specified in the length field. __D__ and __T__ message must be specified before any other messages. This is because otherwise it couldn't be clear whether those lines are part of the protocol or part of the data transfer. From the way how the protocol works we can induce that:
